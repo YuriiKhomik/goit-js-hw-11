@@ -7,8 +7,8 @@ export class ImagesApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
-    this.loadQuantity = 6;
-    this.loadedQuantity = this.loadQuantity;
+    this.loadQuantity = 5;
+    this.loadedQuantity = 0;
   }
 
   fetchImages() {
@@ -21,10 +21,6 @@ export class ImagesApiService {
 
   incrementPage() {
     this.page += 1;
-  }
-
-  incrementLoadedQuantity() {
-    this.loadedQuantity += this.loadQuantity;
   }
 
   resetPage() {

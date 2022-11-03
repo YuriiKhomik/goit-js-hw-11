@@ -11,7 +11,6 @@ const refs = {
 };
 
 const imagesApiService = new ImagesApiService();
-
 let simpleLightBox = new SimpleLightbox('.photo-card a');
 
 refs.searchForm.addEventListener('submit', onSearch);
@@ -19,6 +18,8 @@ refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
 
 function onSearch(e) {
   e.preventDefault();
+  clearImagesContainer();
+  imagesApiService.loadedQuantity = 0;
 
   imagesApiService.query = e.currentTarget.elements.searchQuery.value;
 
@@ -26,36 +27,37 @@ function onSearch(e) {
     return Notify.info('type smth');
   }
 
-  loadMoreButtonToggle();
   imagesApiService.resetPage();
-  imagesApiService.fetchImages().then(function (response) {
-    if (response.data.hits.length < 1) {
-      Notify.failure(
+  imagesApiService.fetchImages().then(function ({ data }) {
+    if (!data.hits.length) {
+      return Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-    } else {
-      clearImagesContainer();
-      createImagesMarkup(response.data.hits);
     }
+    //   console.log(response.data.totalHits);
+    //   console.log(response.data.hits);
+    imagesApiService.loadedQuantity = data.hits.length;
+    totalHitsNotify(data.totalHits);
+
+    createImagesMarkup(data.hits);
+    showLoadMoreButton();
   });
 }
 
-function loadMoreButtonToggle() {
-  refs.loadMoreContainer.classList.toggle('is-hidden');
+function showLoadMoreButton() {
+  refs.loadMoreContainer.classList.remove('is-hidden');
 }
 
 function onLoadMoreBtnClick() {
-  imagesApiService.fetchImages().then(function (response) {
-    let maxQuantity = response.data.totalHits;
+  imagesApiService.fetchImages().then(function ({ data }) {
+    let maxQuantity = data.totalHits;
 
-    imagesApiService.incrementLoadedQuantity();
+    imagesApiService.loadedQuantity += data.hits.length;
+    createImagesMarkup(data.hits);
 
-    if (imagesApiService.loadedQuantity > maxQuantity) {
-      return Notify.info(
-        "We're sorry, but you've reached the end of search results."
-      );
-    } else {
-      createImagesMarkup(response.data.hits);
+    if (imagesApiService.loadedQuantity >= maxQuantity) {
+      Notify.info("We're sorry, but you've reached the end of search results.");
+      loadMoreButtonToggle();
     }
   });
 }
@@ -74,7 +76,7 @@ function createImagesMarkup(images) {
       }) => {
         return `
         <div class="photo-card">
-             <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" width="300"/></a>
+             <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" width="300" height="200" /></a>
             <div class="info">
                 <p class="info-item">
                     <b>Likes${likes}</b>
@@ -100,4 +102,9 @@ function createImagesMarkup(images) {
 
 function clearImagesContainer() {
   refs.gallery.innerHTML = '';
+}
+
+function totalHitsNotify(total) {
+  if (total === 0) return;
+  Notify.info(`Hooray! We found ${total === 500 ? 520 : total} images.`);
 }
