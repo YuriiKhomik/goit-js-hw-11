@@ -59,25 +59,30 @@ function hideLoadMoreButton() {
   refs.loadMoreContainer.classList.add('is-hidden');
 }
 
-async function onLoadMoreBtnClick() {
-  try {
-    const { data } = await imagesApiService.fetchImages();
-    let maxQuantity = data.totalHits;
+async function onLoadMoreBtnClick(e) {
+  if (!e.detail || e.detail == 1) {
+    try {
+      const { data } = await imagesApiService.fetchImages();
+      let maxQuantity = data.totalHits;
 
-    imagesApiService.loadedQuantity += data.hits.length;
-    createImagesMarkup(data.hits);
-
-    hideLoadMoreButton();
-    setTimeout(() => {
-      showLoadMoreButton();
-    }, 2000);
-
-    if (imagesApiService.loadedQuantity >= maxQuantity) {
-      Notify.info("We're sorry, but you've reached the end of search results.");
       hideLoadMoreButton();
+
+      imagesApiService.loadedQuantity += data.hits.length;
+      createImagesMarkup(data.hits);
+
+      if (data.totalHits >= imagesApiService.loadQuantity) {
+        showLoadMoreButton();
+      }
+
+      if (imagesApiService.loadedQuantity >= maxQuantity) {
+        Notify.info(
+          "We're sorry, but you've reached the end of search results."
+        );
+        hideLoadMoreButton();
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
   }
 }
 
