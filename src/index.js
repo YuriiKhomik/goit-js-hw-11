@@ -19,9 +19,49 @@ function onSearch(e) {
     return Notify.info('type smth');
   }
 
-  imagesApiService.fetchImages();
+  imagesApiService.resetPage();
+
+  imagesApiService
+    .fetchImages()
+    .then(response => createImagesMarkup(response.data.hits));
 }
 
 function clearImagesContainer() {
   refs.gallery.innerHTML = '';
+}
+
+function createImagesMarkup(images) {
+  const markup = images
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return `
+        <div class="photo-card">
+            <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+            <div class="info">
+                <p class="info-item">
+                    <b>Likes${likes}</b>
+                </p>
+                <p class="info-item">
+                    <b>Views${views}</b>
+                </p>
+                <p class="info-item">
+                    <b>Comments${comments}</b>
+                </p>
+                <p class="info-item">
+                    <b>Downloads${downloads}</b>
+                </p>
+            </div>
+        </div>`;
+      }
+    )
+    .join('');
+  refs.gallery.innerHTML = markup;
 }
