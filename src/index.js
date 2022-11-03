@@ -7,6 +7,7 @@ const refs = {
   searchForm: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
+  loadMoreContainer: document.querySelector('.load-more-contsiner'),
 };
 
 const imagesApiService = new ImagesApiService();
@@ -23,6 +24,7 @@ function onSearch(e) {
     return Notify.info('type smth');
   }
 
+  refs.loadMoreContainer.classList.toggle('is-hidden');
   imagesApiService.resetPage();
   imagesApiService.fetchImages().then(function (response) {
     if (response.data.hits.length < 1) {
