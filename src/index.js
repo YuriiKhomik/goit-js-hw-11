@@ -48,6 +48,10 @@ function showLoadMoreButton() {
   refs.loadMoreContainer.classList.remove('is-hidden');
 }
 
+function hideLoadMoreButton() {
+  refs.loadMoreContainer.classList.add('is-hidden');
+}
+
 function onLoadMoreBtnClick() {
   imagesApiService.fetchImages().then(function ({ data }) {
     let maxQuantity = data.totalHits;
@@ -57,7 +61,7 @@ function onLoadMoreBtnClick() {
 
     if (imagesApiService.loadedQuantity >= maxQuantity) {
       Notify.info("We're sorry, but you've reached the end of search results.");
-      loadMoreButtonToggle();
+      hideLoadMoreButton();
     }
   });
 }
