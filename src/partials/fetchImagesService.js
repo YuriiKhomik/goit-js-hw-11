@@ -12,11 +12,6 @@ export class ImagesApiService {
   fetchImages() {
     axios.defaults.baseURL = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true`;
 
-    // return axios.get().then(function (response) {
-    //   const images = response.data;
-    //   return images;
-    // });
-
     return axios.get();
   }
 

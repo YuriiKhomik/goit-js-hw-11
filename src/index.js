@@ -1,5 +1,7 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { ImagesApiService } from './partials/fetchImagesService';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
@@ -44,7 +46,7 @@ function createImagesMarkup(images) {
       }) => {
         return `
         <div class="photo-card">
-            <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+             <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
             <div class="info">
                 <p class="info-item">
                     <b>Likes${likes}</b>
@@ -65,3 +67,8 @@ function createImagesMarkup(images) {
     .join('');
   refs.gallery.innerHTML = markup;
 }
+
+let lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
