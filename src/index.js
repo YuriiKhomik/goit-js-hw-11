@@ -67,6 +67,11 @@ async function onLoadMoreBtnClick() {
     imagesApiService.loadedQuantity += data.hits.length;
     createImagesMarkup(data.hits);
 
+    hideLoadMoreButton();
+    setTimeout(() => {
+      showLoadMoreButton();
+    }, 2000);
+
     if (imagesApiService.loadedQuantity >= maxQuantity) {
       Notify.info("We're sorry, but you've reached the end of search results.");
       hideLoadMoreButton();
