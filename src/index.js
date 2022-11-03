@@ -23,9 +23,17 @@ function onSearch(e) {
 
   imagesApiService.resetPage();
 
-  imagesApiService
-    .fetchImages()
-    .then(response => createImagesMarkup(response.data.hits));
+  //   imagesApiService
+  //     .fetchImages()
+  //     .then(response => createImagesMarkup(response.data.hits));
+  imagesApiService.fetchImages().then(function (response) {
+    if (response.data.hits.length < 1) {
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    }
+    createImagesMarkup(response.data.hits);
+  });
 }
 
 function clearImagesContainer() {
