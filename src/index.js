@@ -12,6 +12,8 @@ const refs = {
 
 const imagesApiService = new ImagesApiService();
 
+let simpleLightBox = new SimpleLightbox('.photo-card a');
+
 refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
 
@@ -32,8 +34,6 @@ function onSearch(e) {
         'Sorry, there are no images matching your search query. Please try again.'
       );
     } else {
-      //   console.log(response.data.totalHits);
-      //   console.log(response.data.hits);
       clearImagesContainer();
       createImagesMarkup(response.data.hits);
     }
@@ -95,6 +95,7 @@ function createImagesMarkup(images) {
     .join('');
   //   refs.gallery.innerHTML = markup;
   refs.gallery.insertAdjacentHTML('beforeend', markup);
+  simpleLightBox.refresh();
 }
 
 function clearImagesContainer() {
