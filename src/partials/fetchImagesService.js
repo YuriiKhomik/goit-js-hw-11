@@ -7,10 +7,12 @@ export class ImagesApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
+    this.loadQuantity = 6;
+    this.loadedQuantity = this.loadQuantity;
   }
 
   fetchImages() {
-    axios.defaults.baseURL = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`;
+    axios.defaults.baseURL = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${this.loadQuantity}&page=${this.page}`;
 
     this.incrementPage();
 
@@ -19,6 +21,10 @@ export class ImagesApiService {
 
   incrementPage() {
     this.page += 1;
+  }
+
+  incrementLoadedQuantity() {
+    this.loadedQuantity += this.loadQuantity;
   }
 
   resetPage() {

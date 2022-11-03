@@ -24,7 +24,7 @@ function onSearch(e) {
     return Notify.info('type smth');
   }
 
-  refs.loadMoreContainer.classList.toggle('is-hidden');
+  loadMoreButtonToggle();
   imagesApiService.resetPage();
   imagesApiService.fetchImages().then(function (response) {
     if (response.data.hits.length < 1) {
@@ -32,15 +32,31 @@ function onSearch(e) {
         'Sorry, there are no images matching your search query. Please try again.'
       );
     } else {
+      //   console.log(response.data.totalHits);
+      //   console.log(response.data.hits);
       clearImagesContainer();
       createImagesMarkup(response.data.hits);
     }
   });
 }
 
+function loadMoreButtonToggle() {
+  refs.loadMoreContainer.classList.toggle('is-hidden');
+}
+
 function onLoadMoreBtnClick() {
   imagesApiService.fetchImages().then(function (response) {
-    createImagesMarkup(response.data.hits);
+    let maxQuantity = response.data.totalHits;
+
+    imagesApiService.incrementLoadedQuantity();
+
+    if (imagesApiService.loadedQuantity > maxQuantity) {
+      return Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+    } else {
+      createImagesMarkup(response.data.hits);
+    }
   });
 }
 
