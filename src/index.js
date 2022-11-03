@@ -40,8 +40,12 @@ async function onSearch(e) {
     imagesApiService.loadedQuantity = data.hits.length;
     totalHitsNotify(data.totalHits);
 
+    hideLoadMoreButton();
+
     createImagesMarkup(data.hits);
-    showLoadMoreButton();
+    if (data.totalHits >= imagesApiService.loadQuantity) {
+      showLoadMoreButton();
+    }
   } catch (error) {
     console.log(error);
   }
