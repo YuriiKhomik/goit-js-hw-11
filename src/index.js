@@ -74,7 +74,7 @@ function createImagesMarkup(images) {
       }) => {
         return `
         <div class="photo-card">
-             <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
+             <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" width="300"/></a>
             <div class="info">
                 <p class="info-item">
                     <b>Likes${likes}</b>
