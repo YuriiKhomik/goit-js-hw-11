@@ -19,6 +19,7 @@ refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
 async function onSearch(e) {
   e.preventDefault();
   clearImagesContainer();
+  hideLoadMoreButton();
   imagesApiService.loadedQuantity = 0;
   imagesApiService.resetPage();
 
@@ -39,8 +40,6 @@ async function onSearch(e) {
     //   console.log(response.data.hits);
     imagesApiService.loadedQuantity = data.hits.length;
     totalHitsNotify(data.totalHits);
-
-    hideLoadMoreButton();
 
     createImagesMarkup(data.hits);
     if (data.totalHits >= imagesApiService.loadQuantity) {
